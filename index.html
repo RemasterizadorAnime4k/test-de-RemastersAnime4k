@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Roboto&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Roboto&display=swap" rel="stylesheet">
+    <script async="async" data-cfasync="false" src="//pl27363244.profitableratecpm.com/92a5cd60c487a8ec687237fdb53b8531/invoke.js"></script>
     <style>
         :root {
             --primary-color: #ff6b6b;
@@ -303,9 +303,10 @@
             display: flex;
             gap: 1.5rem;
             align-items: center;
+            justify-content: center; /* Center the Adsterra content */
+            min-height: 150px; /* Give it a minimum height */
             box-shadow: 8px 8px 16px #d1d1d1, -8px -8px 16px #ffffff;
             transition: transform 0.3s ease;
-            cursor: pointer;
             z-index: 1;
         }
 
@@ -627,56 +628,25 @@
     let searchTerm = '';
     window.animeData = []; // Initialize global animeData
 
-    const defaultAdData = {
-        url: "https://es.pikbest.com/templates/food-menu-delicious-burger-instagram-social-media-advertising-banner-ad-post-design_8970422.html",
-        imageSrc: "https://img.pikbest.com/origin/08/97/04/22MpIkbEsTia2.jpg!w700wp",
-        title: "¡Tienda Oficial de Anime!",
-        description: "Consigue productos exclusivos y ediciones coleccionables ✨",
-        ctaText: "Ver Ofertas",
-        ctaUrl: "https://es.pikbest.com/templates/food-menu-delicious-burger-instagram-social-media-advertising-banner-ad-post-design_8970422.html"
-    };
-
-    function createAdElement(adDetails) {
+    function createAdElement() {
         const adContainer = document.createElement('div');
         adContainer.className = 'asd-container';
-        adContainer.dataset.url = adDetails.url;
-        // Generate a unique ID for the ad slot, useful for ad services
-        adContainer.id = `ad-slot-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+        // The click listener is removed as Adsterra's own script will handle ad interactions.
+        adContainer.id = `ad-wrapper-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
 
+        // --- Adsterra Integration ---
+        // The following div is the specific container your Adsterra script will look for.
+        // We embed it inside our styled 'asd-container' to keep the site's look and feel.
         adContainer.innerHTML = `
-            <div class="asd-badge">PUBLICIDAD</div>
-            <img src="${adDetails.imageSrc}"
-                 class="asd-image"
-                 alt="Publicidad"
-                 loading="lazy">
-            <div class="asd-content">
-                <h3 class="asd-title">${adDetails.title}</h3>
-                <p class="asd-description">${adDetails.description}</p>
-                <a href="${adDetails.ctaUrl}" class="asd-cta" target="_blank" rel="noopener noreferrer">${adDetails.ctaText}</a>
-            </div>
-            <!-- 
-              To integrate an ad service (e.g., Google AdSense, Media.net):
-              1. You might replace the innerHTML of this 'adContainer' with the ad service's script/iframe snippet.
-              2. Or, more commonly, replace the content above with a simple placeholder div:
-                 <div id="your-ad-service-slot-id-123"></div> 
-                 (Ensure this ID is unique for each ad slot if you have multiple on a page).
-              3. Then, the ad service's main script (usually in <head> or end of <body>) will target 
-                 'your-ad-service-slot-id-123' to fill it with the ad.
-              The 'asd-container' itself can serve as the main slot if its ID is targeted by the ad service.
-            -->
+            <div id="container-92a5cd60c487a8ec687237fdb53b8531"></div>
         `;
+        
+        // IMPORTANT NOTE: This specific Adsterra code (invoke.js + container div) is designed 
+        // to place ONE ad banner per page. Your current logic creates an ad slot every 18 items.
+        // Be aware that the Adsterra script will only fill the VERY FIRST ad slot it finds on the page.
+        // Subsequent ad slots created by this function will appear as empty styled boxes.
+        // To show ads in multiple slots, you would need separate Ad Unit codes from Adsterra for each slot.
 
-        adContainer.addEventListener('click', (e) => {
-            // If the click is on the CTA button or any other link/button inside the ad, let it proceed.
-            if (e.target.closest('a, button')) {
-                return;
-            }
-            // If an ad service embeds an iframe, clicks inside iframe are handled by the iframe.
-            // This listener is mainly for the default static ad's container click.
-            if (e.target.tagName !== 'IFRAME' && !e.target.closest('iframe')) {
-                 window.open(adContainer.dataset.url, '_blank');
-            }
-        });
         return adContainer;
     }
 
@@ -739,7 +709,7 @@
 
         data.forEach((item, index) => {
             if (index % 18 === 0 && index !== 0) {
-                const adElement = createAdElement(defaultAdData);
+                const adElement = createAdElement();
                 fragment.appendChild(adElement);
             }
 
