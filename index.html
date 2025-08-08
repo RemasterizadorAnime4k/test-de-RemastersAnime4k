@@ -144,6 +144,8 @@
             transform: translateY(0);
 			text-decoration: none !important;
 			color: inherit !important;
+            will-change: transform, box-shadow; /* Hint to the browser */
+            isolation: isolate; /* Create a new stacking context */
         }
 
         .anime-card:hover {
@@ -225,21 +227,19 @@
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             opacity: 0;
-            transition: all 0.3s ease, opacity 0.3s;
+            transition: opacity 0.3s ease, transform 0.3s ease;
             z-index: 1000;
         }
 		
         .back-to-top.show {
-            visibility: visible;
+            opacity: 1;
             transform: translateY(0);
         }		
 
         .back-to-top:hover {
             transform: scale(1.1) translateY(-3px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .favorite-icon {
@@ -303,13 +303,24 @@
             gap: 1.5rem;
             align-items: center;
             box-shadow: 8px 8px 16px #d1d1d1, -8px -8px 16px #ffffff;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
             z-index: 1;
+            min-height: 180px; /* Give it a minimum height to avoid collapse */
         }
 
         .asd-container:hover {
             transform: translateY(-3px);
+        }
+        
+        /* Centrar contenido en el anuncio dinámico de Adsterra */
+        .asd-container:not(.fallback-ad) {
+            justify-content: center;
+        }
+
+        /* Estilo de hover especial para el anuncio de fallback */
+        .asd-container.fallback-ad:hover {
+            box-shadow: 0 0 25px rgba(255, 107, 107, 0.6), 8px 8px 16px #d1d1d1, -8px -8px 16px #ffffff;
         }
 
         .asd-badge {
@@ -390,11 +401,10 @@
 				top: 20px;
 				z-index: 1000;
 				overflow: visible;
-				transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+				transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease;
             }
 			
 			.nav-hidden {
-				box-shadow: none !important;
 				transform: translateY(-150%) !important;
 				transition-duration: 0.3s;
 			}
@@ -567,16 +577,6 @@
             }
         }
 
-		@media (hover: hover) {
-            body {
-                scroll-snap-type: y proximity;
-            }
-            
-            .anime-card {
-                scroll-snap-align: start;
-            }
-        }
-
         @keyframes gradientFlow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -596,6 +596,17 @@
             }
         }
     </style>
+    <script>
+    // Función para cargar anuncios de forma dinámica
+    function loadAdsterraAds() {
+        // Script para banner nativo (cargado dinámicamente)
+        const nativeScript = document.createElement('script');
+        nativeScript.async = true;
+        nativeScript.dataset.cfasync = 'false';
+        nativeScript.src = '//pl27363244.profitableratecpm.com/92a5cd60c487a8ec687237fdb53b8531/invoke.js';
+        document.head.appendChild(nativeScript);
+    }
+    </script>
 </head>
 <body>
     <nav class="navbar" aria-label="Navegación principal">
@@ -625,60 +636,60 @@
     let currentCategory = 'home';
     let searchTerm = '';
     window.animeData = []; // Initialize global animeData
+    let adsterraContainerCreated = false; // Flag to ensure Adsterra ID is used only once
 
-    const defaultAdData = {
-        url: "https://es.pikbest.com/templates/food-menu-delicious-burger-instagram-social-media-advertising-banner-ad-post-design_8970422.html",
-        imageSrc: "https://img.pikbest.com/origin/08/97/04/22MpIkbEsTia2.jpg!w700wp",
-        title: "¡Tienda Oficial de Anime!",
-        description: "Consigue productos exclusivos y ediciones coleccionables ✨",
-        ctaText: "Ver Ofertas",
-        ctaUrl: "https://es.pikbest.com/templates/food-menu-delicious-burger-instagram-social-media-advertising-banner-ad-post-design_8970422.html"
-    };
+    // Crear anuncio alternativo si se bloquea el script
+    function createFallbackAd() {
+        // Find all empty ad containers
+        const adSlots = document.querySelectorAll('.asd-container');
+        if (adSlots.length === 0) return;
 
-    function createAdElement(adDetails) {
-        const adContainer = document.createElement('div');
-        adContainer.className = 'asd-container';
-        adContainer.dataset.url = adDetails.url;
-        // Generate a unique ID for the ad slot, useful for ad services
-        adContainer.id = `ad-slot-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
-
-        adContainer.innerHTML = `
-            <div class="asd-badge">PUBLICIDAD</div>
-            <img src="${adDetails.imageSrc}"
-                 class="asd-image"
-                 alt="Publicidad"
-                 loading="lazy">
-            <div class="asd-content">
-                <h3 class="asd-title">${adDetails.title}</h3>
-                <p class="asd-description">${adDetails.description}</p>
-                <a href="${adDetails.ctaUrl}" class="asd-cta" target="_blank" rel="noopener noreferrer">${adDetails.ctaText}</a>
-            </div>
-            <!-- 
-              To integrate an ad service (e.g., Google AdSense, Media.net):
-              1. You might replace the innerHTML of this 'adContainer' with the ad service's script/iframe snippet.
-              2. Or, more commonly, replace the content above with a simple placeholder div:
-                 <div id="your-ad-service-slot-id-123"></div> 
-                 (Ensure this ID is unique for each ad slot if you have multiple on a page).
-              3. Then, the ad service's main script (usually in <head> or end of <body>) will target 
-                 'your-ad-service-slot-id-123' to fill it with the ad.
-              The 'asd-container' itself can serve as the main slot if its ID is targeted by the ad service.
-            -->
+        const fallbackAdContent = `
+            <a href="https://remasterizadoranime4k.github.io/test-de-RemastersAnime4k/Patrocinio-Anuncios.html" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit; display: contents;">
+                <div class="asd-badge">PUBLICIDAD</div>
+                <img src="https://i.pinimg.com/736x/11/15/2d/11152dc45f236704097ab8582b865acb.jpg" 
+                    class="asd-image" 
+                    alt="Publicidad"
+                    loading="lazy">
+                <div class="asd-content">
+                    <h3 class="asd-title">¡Tu apoyo hace la diferencia! ❤️</h3>
+                    <p class="asd-description">Tu visita a los patrocinadores hace posible que sigamos compartiendo tu anime favorito en 4K</p>
+                    <div class="asd-cta">Visita</div>
+                </div>
+            </a>
         `;
-
-        adContainer.addEventListener('click', (e) => {
-            // If the click is on the CTA button or any other link/button inside the ad, let it proceed.
-            if (e.target.closest('a, button')) {
-                return;
-            }
-            // If an ad service embeds an iframe, clicks inside iframe are handled by the iframe.
-            // This listener is mainly for the default static ad's container click.
-            if (e.target.tagName !== 'IFRAME' && !e.target.closest('iframe')) {
-                 window.open(adContainer.dataset.url, '_blank');
+        
+        adSlots.forEach(container => {
+            // Only fill if it's empty or was the adsterra placeholder
+            if (container.innerHTML.trim() === '' || container.querySelector('#container-92a5cd60c487a8ec687237fdb53b8531')) {
+                 container.classList.add('fallback-ad'); // Add class for special hover
+                 container.innerHTML = fallbackAdContent;
             }
         });
-        return adContainer;
     }
 
+    // Modificar la función createAdElement
+    function createAdElement(isFirstAd) {
+        const adContainer = document.createElement('div');
+        adContainer.className = 'asd-container';
+        
+        // Contenedor para Adsterra (será reemplazado si falla)
+        if (isFirstAd) {
+            // Añadir el badge para una apariencia consistente
+            const badge = document.createElement('div');
+            badge.className = 'asd-badge';
+            badge.textContent = 'PUBLICIDAD';
+            adContainer.appendChild(badge);
+
+            // Añadir el contenedor de Adsterra
+            const adsterraPlaceholder = document.createElement('div');
+            adsterraPlaceholder.id = 'container-92a5cd60c487a8ec687237fdb53b8531';
+            adContainer.appendChild(adsterraPlaceholder);
+        }
+        // Los otros contenedores de anuncios se dejan vacíos para que el fallback los llene.
+        
+        return adContainer;
+    }
 
     async function loadAnimeData() {
         try {
@@ -729,6 +740,7 @@
         const grid = document.querySelector('.anime-grid');
         grid.innerHTML = ''; // Clear previous items
         const fragment = document.createDocumentFragment();
+        adsterraContainerCreated = false; // Reset flag on each generation
 
         if (!Array.isArray(data)) {
             console.error('generateCards expects an array, but received:', data);
@@ -737,8 +749,11 @@
         }
 
         data.forEach((item, index) => {
-            if (index % 18 === 0 && index !== 0) {
-                const adElement = createAdElement(defaultAdData);
+            if (index > 0 && index % 18 === 0) {
+                const adElement = createAdElement(!adsterraContainerCreated);
+                if (!adsterraContainerCreated) {
+                    adsterraContainerCreated = true;
+                }
                 fragment.appendChild(adElement);
             }
 
@@ -901,10 +916,8 @@
             // Back to top button
             const button = document.querySelector('.back-to-top');
             if (window.scrollY > 300) { // Show earlier
-                button.style.opacity = '1';
-                button.classList.add('show'); // For CSS transition if needed
+                button.classList.add('show');
             } else {
-                button.style.opacity = '0';
                 button.classList.remove('show');
             }
 
@@ -1029,10 +1042,24 @@
         const navLinksDiv = document.querySelector('.nav-links');
         if(navLinksDiv) navLinksDiv.id = 'nav-links-container';
 
-
         // Ensure favorite icons are updated on load based on localStorage
-        // This is important if filterCards doesn't run due to no data, or if cards are already in DOM from cache
         updateFavoriteIcons(); 
+
+        // --- Ad System Initialization ---
+        try {
+            loadAdsterraAds();
+        } catch (e) {
+            console.error('Error loading ads:', e);
+        }
+        
+        // Detect ad blockers and show fallback ad
+        setTimeout(() => {
+            const adContainer = document.getElementById('container-92a5cd60c487a8ec687237fdb53b8531');
+            // If the container doesn't exist OR it exists but is empty, run the fallback.
+            if (!adContainer || adContainer.innerHTML.trim() === '') {
+                createFallbackAd();
+            }
+        }, 2000);
     });
 </script>
 </body>
