@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anuncios - Remastersanime4k</title>
+    <title>Espacio Publicitario - Remastersanime4k</title>
     <meta name="description" content="Espacio publicitario de Remastersanime4k">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -31,22 +31,34 @@
             font-family: 'Comic Neue', cursive;
             margin: 0;
             padding: 20px;
+            padding-top: 100px; /* Espacio para la navbar fija */
             min-height: 100vh;
         }
-        .navbar {
+
+        /* --- Navegación Detallada (actualizada) --- */
+        .detail-nav {
             backdrop-filter: blur(10px);
             background: var(--glass-bg);
             border-radius: 15px;
             padding: 0.8rem 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 8px 8px 16px #d1d1d1, -8px -8px 16px #ffffff;
+            margin: 0 auto 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
-            position: sticky;
+            gap: 2rem;
+            position: fixed;
             top: 20px;
-            z-index: 100;
+            left: 20px;
+            right: 20px;
+            z-index: 1000;
+            box-shadow: 8px 8px 16px #d1d1d1, -8px -8px 16px #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-family: 'Comic Neue', cursive;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+        }
+        .detail-nav.nav-hidden {
+            transform: translateY(-150%);
         }
         .site-title {
             color: #2d3436;
@@ -56,23 +68,24 @@
             cursor: default;
             user-select: none;
         }
+
         .back-link {
-            color: #2d3436;
-            text-decoration: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: 3px 3px 6px #d1d1d1, -3px -3px 6px #ffffff;
-        }
-        .back-link:hover {
             background: var(--primary-color);
-            color: white !important;
-            box-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            color: white;
+            padding: 0.8rem 2rem;
+			      margin-left: auto;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            border: 2px solid white;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 3px 3px 6px #d1d1d1, -3px -3px 6px #ffffff;
         }
 
         .ads-title {
@@ -81,6 +94,52 @@
             font-size: 2rem;
             margin: 2rem 0;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* --- Mensaje de Recomendación --- */
+        .advice-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid #fff;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 8px 8px 16px #d1d1d1, -8px -8px 16px #ffffff;
+            text-align: center;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .advice-title {
+            font-family: 'Comic Neue', cursive;
+            color: #2d3436;
+            margin: 0 0 1rem 0;
+            font-size: 1.4rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .advice-description {
+            font-family: 'Roboto', sans-serif;
+            color: #2d3436;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+        .help-button {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: white !important;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-family: 'Comic Neue', cursive;
+            transition: all 0.3s ease;
+            border: 2px solid white;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            font-size: 1rem;
+        }
+        .help-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.2);
         }
 
         .ads-container {
@@ -165,28 +224,6 @@
             text-align: center;
         }
 
-        /* --- Estilos para el Enlace Directo --- */
-        .direct-link-card {
-            text-align: center;
-        }
-        .direct-link-button {
-            display: inline-block;
-            background: var(--secondary-color);
-            color: white !important;
-            padding: 1rem 2rem;
-            border-radius: 30px;
-            text-decoration: none;
-            font-family: 'Comic Neue', cursive;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            border: 2px solid white;
-            box-shadow: 3px 3px 6px rgba(0,0,0,0.2);
-        }
-        .direct-link-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 5px 5px 10px rgba(0,0,0,0.2);
-        }
-
         .back-to-top {
             position: fixed;
             bottom: 30px;
@@ -216,10 +253,13 @@
         @media (max-width: 768px) {
             body {
                 padding: 10px;
+                padding-top: 80px; /* Ajuste para móviles */
             }
-            .navbar {
+            .detail-nav {
                 padding: 1rem;
-                flex-direction: column;
+                left: 10px;
+                right: 10px;
+                top: 10px;
                 gap: 1rem;
             }
             .site-title {
@@ -228,7 +268,7 @@
             .ads-container {
                 gap: 2rem;
             }
-            .ad-card {
+            .ad-card, .advice-container {
                 padding: 1rem;
             }
             .banner-728x90-container {
@@ -251,20 +291,36 @@
     </style>
 </head>
 <body>
-    <nav class="navbar" aria-label="Navegación">
+    <!-- Barra de navegación actualizada -->
+    <nav class="detail-nav" aria-label="Navegación">
         <h1 class="site-title">Remastersanime4k</h1>
-        <a href="index2%20-%20copia.html" class="back-link">← Volver al Inicio</a> <!-- Ajusta la URL si es necesario -->
+        <!-- Botón de volver con estilos actualizados -->
+        <a href="index2%20-%20copia.html" class="back-link">← Volver</a>
     </nav>
 
     <h2 class="ads-title">Espacio Publicitario</h2>
+
+    <!-- Mensaje de recomendación -->
+    <div class="advice-container">
+        <h3 class="advice-title">Tu visualización nos ayuda mucho ❤️</h3>
+        <p class="advice-description">
+        Si no puedes visualizar los anuncios, es que parece que tu bloqueador de anuncios está activo. Para ver los anuncios que nos ayudan a mantener el sitio, por favor considera desactivarlo para este dominio. Si no ves anuncios, haz clic en el botón de abajo para ayudarnos. (Te enviará a un anuncio automáticamente)
+        </p>
+        <a href="https://www.profitableratecpm.com/n1xznzwm?key=e9b99d4b035f1b9ebd4fc5fd84a8bc0b"
+           class="help-button"
+           target="_blank"
+           rel="noopener noreferrer">
+            Ver Anuncio
+        </a>
+    </div>
 
     <div class="ads-container">
 
         <!-- Banner 728x90 -->
         <div class="ad-card">
             <div class="ad-badge">PUBLICIDAD</div>
-            <h3 class="ad-title">Banner Principal</h3>
-            <p class="ad-description">Anuncio de formato estándar en la parte superior.</p>
+            <h3 class="ad-title">Contenido de Nuestro Patrocinador.</h3>
+            <p class="ad-description"></p>
             <div class="banner-728x90-container" id="banner728x90">
                 <!-- El script de Adsterra se cargará aquí -->
             </div>
@@ -273,26 +329,12 @@
         <!-- Banner Nativo -->
         <div class="ad-card">
             <div class="ad-badge">PUBLICIDAD</div>
-            <h3 class="ad-title">Contenido Patrocinado</h3>
-            <p class="ad-description">Anuncio integrado de forma nativa.</p>
+            <h3 class="ad-title">Contenido de Nuestro Patrocinador.</h3>
+            <p class="ad-description"></p>
             <div class="native-banner-container" id="nativeBanner">
                  <!-- El script y div de Adsterra se cargarán aquí -->
                  <p>Cargando contenido nativo...</p>
             </div>
-        </div>
-
-        <!-- Enlace Directo -->
-        <div class="ad-card direct-link-card">
-            <div class="ad-badge">PUBLICIDAD</div>
-            <h3 class="ad-title">Oferta Especial</h3>
-            <p class="ad-description">Haz clic para descubrir una promoción exclusiva.</p>
-            <a href="https://www.profitableratecpm.com/n1xznzwm?key=e9b99d4b035f1b9ebd4fc5fd84a8bc0b"
-               class="direct-link-button"
-               target="_blank"
-               rel="noopener noreferrer"
-               id="directLinkButton">
-                Ir a la Oferta
-            </a>
         </div>
 
     </div> <!-- /ads-container -->
@@ -324,7 +366,7 @@
                 console.warn("Error al cargar el script del Banner 728x90.");
                 var container = document.getElementById('banner728x90');
                 if (container) {
-                    container.innerHTML = '<p style="color:#2d3436;">No se pudo cargar el anuncio.</p>';
+                    container.innerHTML = '<p style="color:#2d3436;">No se pudo cargar el contenido. Desactive el bloqueador por favor</p>';
                 }
             };
             document.getElementById('banner728x90').appendChild(script);
@@ -356,12 +398,11 @@
                  console.warn("Posible error en script de Adsterra (Banner Nativo):", message, source);
                  var container = document.getElementById('nativeBanner');
                  if (container && container.innerHTML.trim() === '') { // Si sigue vacío
-                      container.innerHTML = '<p style="color:#2d3436;">No se pudo cargar el contenido patrocinado.</p>';
+                      container.innerHTML = '<p style="color:#2d3436;">No se pudo cargar el contenido. Desactive el bloqueador por favor</p>';
                  }
              }
         };
     </script>
-
 
     <script>
         // --- Funcionalidad del Botón "Volver Arriba" ---
@@ -376,6 +417,63 @@
 
         document.querySelector('.back-to-top').addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // --- Funcionalidad para ocultar la navbar al hacer scroll (como en tu sitio principal) ---
+        class MobileNavigation {
+            constructor() {
+                this.lastScroll = 0;
+                this.navbar = document.querySelector('.detail-nav');
+                this.isMobile = window.innerWidth <= 768;
+                this.throttleTimeout = null;
+                this.navHidden = false;
+                this.addEventListeners();
+                this.handleResize(); // Initial check
+            }
+            addEventListeners() {
+                window.addEventListener('scroll', () => this.handleScrollThrottled(), { passive: true });
+                window.addEventListener('resize', () => this.handleResize());
+            }
+            handleScrollThrottled() {
+                if (!this.throttleTimeout) {
+                    this.throttleTimeout = setTimeout(() => {
+                        this.performScrollAction();
+                        this.throttleTimeout = null;
+                    }, 100); // Throttle to run at most every 100ms
+                }
+            }
+            performScrollAction() {
+                if (!this.isMobile) return; // Solo en móviles
+                const currentScroll = window.pageYOffset;
+                // Hide navbar if scrolling down and past a certain point (e.g. 100px)
+                // Show if scrolling up or near the top
+                if (currentScroll > this.lastScroll && currentScroll > 100) {
+                    if (!this.navHidden) {
+                        this.navbar.classList.add('nav-hidden');
+                        this.navHidden = true;
+                    }
+                } else {
+                    if (this.navHidden) {
+                        this.navbar.classList.remove('nav-hidden');
+                        this.navHidden = false;
+                    }
+                }
+                this.lastScroll = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
+            }
+            handleResize() {
+                this.isMobile = window.innerWidth <= 768;
+                if (!this.isMobile) {
+                    this.navbar.classList.remove('nav-hidden');
+                    this.navHidden = false; // Reset state if not mobile
+                }
+                 // Re-evaluate scroll behavior based on new size
+                this.performScrollAction();
+            }
+        }
+
+        // Inicializar la funcionalidad de navegación móvil
+        document.addEventListener('DOMContentLoaded', () => {
+            new MobileNavigation();
         });
     </script>
 </body>
